@@ -1,0 +1,12 @@
+name: focus_training
+description: A gamified focus training module for Artemis that manages focus training activities and provides feedback on progress.
+version: 1.0.0
+environment:
+  sdk: '>=2.17.0 <4.0.0'
+
+dependencies:
+  uuid: ^4.0.0
+
+dev_dependencies:
+  test: ^1.24.0
+  lints: ^2.0.0
