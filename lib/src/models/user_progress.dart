@@ -97,6 +97,7 @@ class UserProgress {
       'currentStreak': currentStreak,
       'longestStreak': longestStreak,
       'totalSessions': totalSessions,
+      // Note: Microseconds are lost in serialization, precision limited to seconds
       'totalFocusTime': totalFocusTime.inSeconds,
       'achievements': achievements.map((a) => a.toJson()).toList(),
       'recentSessions': recentSessions.map((s) => s.toJson()).toList(),

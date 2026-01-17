@@ -1,6 +1,21 @@
+import 'package:uuid/uuid.dart';
+
 import '../models/achievement.dart';
 import '../models/focus_session.dart';
 import '../models/user_progress.dart';
+
+const _uuid = Uuid();
+
+/// Result of checking achievements
+class _AchievementCheckResult {
+  final List<Achievement> achievements;
+  final int xpEarned;
+
+  const _AchievementCheckResult({
+    required this.achievements,
+    required this.xpEarned,
+  });
+}
 
 /// Service for managing focus training sessions and gamification
 class FocusTrainingService {
@@ -19,7 +34,7 @@ class FocusTrainingService {
     Map<String, dynamic>? metadata,
   }) {
     final session = FocusSession(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      id: _uuid.v4(),
       startTime: DateTime.now(),
       plannedDuration: plannedDuration,
       notes: notes,
@@ -50,10 +65,8 @@ class FocusTrainingService {
 
   /// Update user progress after completing a session
   void _updateProgress(FocusSession completedSession) {
-    // Calculate XP earned
-    final xpEarned = completedSession.calculateXP();
-    final newTotalXP = _progress.totalXP + xpEarned;
-    final newLevel = UserProgress.calculateLevel(newTotalXP);
+    // Calculate XP earned from session
+    final sessionXP = completedSession.calculateXP();
 
     // Update streak
     final now = DateTime.now();
@@ -89,13 +102,20 @@ class FocusTrainingService {
     final newTotalFocusTime = _progress.totalFocusTime +
         (completedSession.actualDuration ?? Duration.zero);
 
-    // Check for new achievements
-    final newAchievements = _checkAchievements(
+    // Check for new achievements and calculate achievement XP
+    final achievementResult = _checkAchievements(
       completedSession,
       newTotalSessions,
       newStreak,
       recentSessions,
     );
+    
+    final newAchievements = achievementResult.achievements;
+    final achievementXP = achievementResult.xpEarned;
+    
+    // Calculate total XP and level
+    final newTotalXP = _progress.totalXP + sessionXP + achievementXP;
+    final newLevel = UserProgress.calculateLevel(newTotalXP);
 
     _progress = _progress.copyWith(
       totalXP: newTotalXP,
@@ -111,7 +131,7 @@ class FocusTrainingService {
   }
 
   /// Check and unlock achievements based on current progress
-  List<Achievement> _checkAchievements(
+  _AchievementCheckResult _checkAchievements(
     FocusSession session,
     int totalSessions,
     int currentStreak,
@@ -119,6 +139,7 @@ class FocusTrainingService {
   ) {
     final achievements = List<Achievement>.from(_progress.achievements);
     final now = DateTime.now();
+    int totalXPEarned = 0;
 
     // Helper to unlock achievement if not already unlocked
     void unlockIfNew(AchievementType type) {
@@ -128,11 +149,7 @@ class FocusTrainingService {
           unlockedAt: now,
         );
         achievements.add(achievement);
-        
-        // Add achievement XP to total
-        _progress = _progress.copyWith(
-          totalXP: _progress.totalXP + achievement.xpReward,
-        );
+        totalXPEarned += achievement.xpReward;
       }
     }
 
@@ -165,7 +182,10 @@ class FocusTrainingService {
       unlockIfNew(AchievementType.marathonSession);
     }
 
-    return achievements;
+    return _AchievementCheckResult(
+      achievements: achievements,
+      xpEarned: totalXPEarned,
+    );
   }
 
   /// Get motivational feedback based on session performance
