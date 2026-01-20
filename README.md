@@ -201,6 +201,17 @@ dart run example/main.dart
 dart test
 ```
 
+## Documentation
+
+- [Objectives](./OBJECTIVES.md) - Goals, requirements, and success criteria
+- [Architecture](docs/ARCHITECTURE.md) - System design
+- [Deployment](docs/DEPLOYMENT.md) - Deployment guide
+- [Changelog](./CHANGELOG.md) - Version history
+
 ## License
 
 MIT License - see LICENSE file for details
+
+---
+
+[Platform Documentation](../../../docs/) | [Product Overview](../../../docs/products/focus-training.md)
