@@ -1,12 +1,21 @@
 name: focus_training
-description: A gamified focus training module for Artemis that manages focus training activities and provides feedback on progress.
+description: A gamified focus training module for Artemis with session tracking, XP, levels, streaks, and achievements.
 version: 1.0.0
 environment:
-  sdk: '>=2.17.0 <4.0.0'
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
+  flutter:
+    sdk: flutter
   uuid: ^4.0.0
+  rummel_blue_theme:
+    path: ../../../resources/rummel_blue_theme
 
 dev_dependencies:
+  flutter_test:
+    sdk: flutter
   test: ^1.24.0
   lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
