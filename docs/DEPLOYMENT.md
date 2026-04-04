@@ -1,42 +1,21 @@
-# Focus Training Deployment
+# Focus Training deployment
 
 ## Overview
 
-Focus Training is currently a Python CLI application. This guide covers local installation and usage.
+Focus Training is a **Flutter** application. There is no matching service under `services/` yet.
 
-## Installation
-
-```bash
-cd modules/planners/focus-training
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-```
-
-## Usage
+## Local build
 
 ```bash
-# Run the application
-python -m focus_training
-
-# Run tests
-pytest
+cd focus-training
+flutter pub get
+flutter run -d chrome
 ```
 
-## Configuration
+## Production
 
-Configuration is managed via environment variables or a `.env` file:
-
-```bash
-DATABASE_URL=sqlite:///./focus_training.db
-```
-
-## Future Deployment
-
-When Flutter frontend and FastAPI backend are added:
-- Frontend: GitHub Pages via infrastructure workflows
-- Backend: AWS ECS via infrastructure workflows
+Build Flutter web or store binaries as for your other apps (`flutter build web`, `flutter build apk`, etc.). Wire CI/CD in this repo or via shared infrastructure workflows when defined.
 
 ---
 
-[Back to Module](../) | [Platform Documentation](../../../../docs/)
+**Last updated**: April 2026
