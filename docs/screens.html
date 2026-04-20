@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Focus Training — Screens</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f0f0f0; color: #1a1a1a; padding: 32px 24px; }
+    h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+    .subtitle { font-size: 13px; color: #666; margin-bottom: 36px; }
+    .section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #999; margin: 48px 0 16px; padding-bottom: 6px; border-bottom: 1px solid #ddd; }
+    .screens { display: flex; flex-wrap: wrap; gap: 32px; }
+    .phone { width: 320px; flex-shrink: 0; }
+    .phone-label { font-size: 11px; font-weight: 600; color: #666; text-align: center; margin-bottom: 8px; text-transform: uppercase; letter-spacing: .05em; }
+    .phone-shell { background: #fff; border-radius: 28px; border: 2.5px solid #333; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,.12); position: relative; }
+    .status-bar { background: #fff; display: flex; justify-content: space-between; align-items: center; padding: 10px 20px 4px; font-size: 11px; font-weight: 600; color: #333; border-bottom: 1px solid #f0f0f0; }
+    .app-bar { background: #fff; padding: 14px 16px 10px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #ececec; }
+    .app-bar .title { font-size: 18px; font-weight: 700; flex: 1; }
+    .app-bar .actions { display: flex; gap: 6px; }
+    .app-bar .actions span { font-size: 20px; color: #555; }
+    .screen-body { min-height: 500px; padding: 14px; background: #fafafa; overflow: hidden; }
+    .card { background: #fff; border-radius: 12px; border: 1px solid #e8e8e8; padding: 14px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,.05); }
+    .text-xs { font-size: 10px; } .text-sm { font-size: 12px; } .text-md { font-size: 14px; } .text-lg { font-size: 16px; font-weight: 700; } .text-xl { font-size: 18px; font-weight: 700; }
+    .muted { color: #888; } .primary { color: #1976D2; }
+    .row { display: flex; align-items: center; gap: 8px; } .row-sb { display: flex; align-items: center; justify-content: space-between; } .col { display: flex; flex-direction: column; gap: 4px; } .flex-1 { flex: 1; }
+    .chip { font-size: 10px; font-weight: 600; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; display: inline-block; }
+    .chip-blue { background: #E3F2FD; color: #1976D2; } .chip-green { background: #E8F5E9; color: #2E7D32; } .chip-amber { background: #FFF8E1; color: #E65100; } .chip-grey { background: #F5F5F5; color: #555; } .chip-red { background: #FCE4EC; color: #B71C1C; }
+    .btn-filled { width: 100%; background: #1976D2; color: #fff; border: none; border-radius: 10px; padding: 12px; font-size: 14px; font-weight: 600; text-align: center; margin-top: 8px; }
+    .btn-outline { width: 100%; background: #fff; color: #1976D2; border: 2px solid #1976D2; border-radius: 10px; padding: 11px; font-size: 14px; font-weight: 600; text-align: center; margin-top: 8px; }
+    .fab { width: 50px; height: 50px; border-radius: 14px; background: #1976D2; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 26px; position: absolute; bottom: 16px; right: 16px; box-shadow: 0 4px 12px rgba(25,118,210,.4); }
+    .progress-bar-bg { background: #E3F2FD; border-radius: 4px; height: 8px; width: 100%; margin: 6px 0; }
+    .progress-bar-fill { background: #1976D2; border-radius: 4px; height: 8px; }
+    .xp-bar-bg { background: #E3F2FD; border-radius: 6px; height: 12px; width: 100%; }
+    .xp-bar-fill { background: linear-gradient(90deg, #1976D2, #42A5F5); border-radius: 6px; height: 12px; }
+    .stat-row { display: flex; gap: 8px; margin-bottom: 12px; }
+    .stat-box { flex: 1; background: #fff; border-radius: 10px; border: 1px solid #e8e8e8; padding: 10px 8px; text-align: center; }
+    .stat-val { font-size: 18px; font-weight: 700; color: #1976D2; }
+    .stat-lbl { font-size: 10px; color: #888; margin-top: 2px; }
+    .level-card { background: linear-gradient(135deg, #1976D2, #42A5F5); border-radius: 14px; padding: 16px; margin-bottom: 12px; color: #fff; }
+    .achievement-scroll { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 12px; }
+    .achievement-tile { flex-shrink: 0; width: 70px; text-align: center; }
+    .achievement-icon { width: 48px; height: 48px; border-radius: 12px; background: #E3F2FD; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 4px; }
+    .achievement-icon.locked { background: #F5F5F5; filter: grayscale(1); opacity: .5; }
+    .session-tile { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
+    .session-tile:last-child { border-bottom: none; }
+    .score-badge { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .timer-circle { width: 160px; height: 160px; border-radius: 50%; border: 8px solid #1976D2; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 20px auto; background: #fff; box-shadow: 0 4px 20px rgba(25,118,210,.2); }
+    .duration-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px 0; }
+    .duration-chip { padding: 10px; border-radius: 8px; border: 1.5px solid #ddd; text-align: center; font-size: 13px; font-weight: 600; color: #555; }
+    .duration-chip.selected { border-color: #1976D2; background: #E3F2FD; color: #1976D2; }
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-size: 11px; font-weight: 600; color: #555; margin-bottom: 4px; text-transform: uppercase; letter-spacing: .04em; }
+    .field-input { width: 100%; border: 1.5px solid #ccc; border-radius: 8px; padding: 8px 10px; font-size: 13px; color: #222; background: #fff; }
+    .score-slider { width: 100%; height: 6px; background: linear-gradient(90deg, #f44336, #ff9800, #4caf50); border-radius: 3px; position: relative; margin: 8px 0 4px; }
+    .score-thumb { width: 18px; height: 18px; border-radius: 50%; background: #1976D2; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.3); position: absolute; top: -6px; left: 72%; }
+    .rating-row { display: flex; gap: 6px; margin-top: 12px; }
+    .rating-btn { flex: 1; padding: 10px 4px; border-radius: 8px; text-align: center; font-size: 11px; font-weight: 700; }
+    .r-again { background: #FCE4EC; color: #C62828; }
+    .r-hard  { background: #FFF3E0; color: #E65100; }
+    .r-good  { background: #E8F5E9; color: #2E7D32; }
+    .r-easy  { background: #E3F2FD; color: #1565C0; }
+  </style>
+</head>
+<body>
+
+  <h1>🎯 Focus Training</h1>
+  <p class="subtitle">Build focus like a muscle — gamified sessions with XP, levels, and achievements.</p>
+
+  <!-- ── Main Screens ── -->
+  <div class="section-label">Main Screens</div>
+  <div class="screens">
+
+    <!-- Home -->
+    <div class="phone">
+      <div class="phone-label">Home</div>
+      <div class="phone-shell">
+        <div class="status-bar"><span>9:41</span><span>●●●</span></div>
+        <div class="app-bar">
+          <div class="title">Focus Training</div>
+          <div class="actions"><span>🏆</span></div>
+        </div>
+        <div class="screen-body" style="position:relative; padding-bottom: 72px;">
+          <div class="level-card">
+            <div class="row-sb">
+              <div>
+                <div class="text-sm" style="opacity:.8">Level 7</div>
+                <div style="font-size:22px; font-weight:800; margin: 2px 0;">Focus Adept</div>
+              </div>
+              <div style="font-size:40px;">🎯</div>
+            </div>
+            <div style="margin-top:10px;">
+              <div class="row-sb text-xs" style="color:rgba(255,255,255,.8); margin-bottom:4px;">
+                <span>2,340 XP</span><span>3,000 XP</span>
+              </div>
+              <div class="xp-bar-bg" style="background:rgba(255,255,255,.3);">
+                <div class="xp-bar-fill" style="width:78%; background:rgba(255,255,255,.9);"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stat-row">
+            <div class="stat-box"><div class="stat-val">12</div><div class="stat-lbl">Day Streak</div></div>
+            <div class="stat-box"><div class="stat-val">47</div><div class="stat-lbl">Sessions</div></div>
+            <div class="stat-box"><div class="stat-val">68h</div><div class="stat-lbl">Focus Time</div></div>
+            <div class="stat-box"><div class="stat-val">84</div><div class="stat-lbl">Avg Score</div></div>
+          </div>
+
+          <div class="row-sb" style="margin-bottom:8px;">
+            <span class="text-md" style="font-weight:700;">Recent Achievements</span>
+          </div>
+          <div class="achievement-scroll">
+            <div class="achievement-tile">
+              <div class="achievement-icon">🔥</div>
+              <div class="text-xs muted">Hot Streak</div>
+            </div>
+            <div class="achievement-tile">
+              <div class="achievement-icon">⏱️</div>
+              <div class="text-xs muted">Marathon</div>
+            </div>
+            <div class="achievement-tile">
+              <div class="achievement-icon">🌟</div>
+              <div class="text-xs muted">Perfect 100</div>
+            </div>
+            <div class="achievement-tile">
+              <div class="achievement-icon locked">🎖️</div>
+              <div class="text-xs muted">Locked</div>
+            </div>
+          </div>
+
+          <div class="row-sb" style="margin-bottom:8px;">
+            <span class="text-md" style="font-weight:700;">Recent Sessions</span>
+          </div>
+          <div class="card" style="padding:8px 14px;">
+            <div class="session-tile">
+              <div class="score-badge" style="background:#4CAF50;">92</div>
+              <div class="col flex-1">
+                <div class="text-sm" style="font-weight:600;">45 min session</div>
+                <div class="text-xs muted">Today · 2:30 PM</div>
+              </div>
+              <span class="chip chip-green">Great</span>
+            </div>
+            <div class="session-tile">
+              <div class="score-badge" style="background:#FF9800;">78</div>
+              <div class="col flex-1">
+                <div class="text-sm" style="font-weight:600;">25 min session</div>
+                <div class="text-xs muted">Yesterday · 10:00 AM</div>
+              </div>
+              <span class="chip chip-amber">Good</span>
+            </div>
+            <div class="session-tile">
+              <div class="score-badge" style="background:#4CAF50;">95</div>
+              <div class="col flex-1">
+                <div class="text-sm" style="font-weight:600;">60 min session</div>
+                <div class="text-xs muted">Mon · 9:15 AM</div>
+              </div>
+              <span class="chip chip-green">Excellent</span>
+            </div>
+          </div>
+          <div class="fab">▶</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Session Setup -->
+    <div class="phone">
+      <div class="phone-label">Session — Setup</div>
+      <div class="phone-shell">
+        <div class="status-bar"><span>9:41</span><span>●●●</span></div>
+        <div class="app-bar">
+          <div class="title">New Session</div>
+        </div>
+        <div class="screen-body">
+          <div style="font-size:13px; font-weight:600; margin-bottom:8px;">Duration</div>
+          <div class="duration-grid">
+            <div class="duration-chip">15 min</div>
+            <div class="duration-chip selected">25 min</div>
+            <div class="duration-chip">45 min</div>
+            <div class="duration-chip">60 min</div>
+            <div class="duration-chip">90 min</div>
+            <div class="duration-chip">120 min</div>
+          </div>
+          <div class="field" style="margin-top:8px;">
+            <label>Session Notes (optional)</label>
+            <div class="field-input" style="height:64px; color:#aaa; font-style:italic;">What will you focus on?</div>
+          </div>
+          <div class="btn-filled">Start Session</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Session Active -->
+    <div class="phone">
+      <div class="phone-label">Session — Active</div>
+      <div class="phone-shell">
+        <div class="status-bar"><span>9:41</span><span>●●●</span></div>
+        <div class="app-bar">
+          <div class="title">Focusing…</div>
+        </div>
+        <div class="screen-body" style="text-align:center;">
+          <div class="timer-circle">
+            <div style="font-size:36px; font-weight:800; color:#1976D2;">18:42</div>
+            <div class="text-xs muted">remaining</div>
+          </div>
+          <div class="text-sm muted" style="margin-bottom:16px;">25 min session · Deep Work</div>
+          <div class="card" style="text-align:left;">
+            <div class="text-sm" style="font-weight:600; margin-bottom:6px;">Focus Score</div>
+            <div class="score-slider"><div class="score-thumb"></div></div>
+            <div class="row-sb text-xs muted"><span>Distracted</span><span>Locked In</span></div>
+          </div>
+          <div class="btn-filled" style="background:#4CAF50; margin-top:12px;">Complete Session</div>
+          <div class="btn-outline" style="border-color:#f44336; color:#f44336;">Abandon</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Session Complete -->
+    <div class="phone">
+      <div class="phone-label">Session — Complete</div>
+      <div class="phone-shell">
+        <div class="status-bar"><span>9:41</span><span>●●●</span></div>
+        <div class="app-bar"><div class="title">Session Complete</div></div>
+        <div class="screen-body" style="text-align:center;">
+          <div style="font-size:64px; margin: 20px 0 8px;">🎉</div>
+          <div class="text-xl" style="margin-bottom:4px;">Great session!</div>
+          <div class="text-sm muted" style="margin-bottom:20px;">25 minutes · Score: 88</div>
+          <div class="card">
+            <div class="row-sb" style="margin-bottom:10px;">
+              <span class="text-sm" style="font-weight:600;">XP Earned</span>
+              <span class="chip chip-blue">+120 XP</span>
+            </div>
+            <div class="row-sb" style="margin-bottom:8px;">
+              <span class="text-sm muted">Base XP</span><span class="text-sm">80 XP</span>
+            </div>
+            <div class="row-sb" style="margin-bottom:8px;">
+              <span class="text-sm muted">Score bonus</span><span class="text-sm">+28 XP</span>
+            </div>
+            <div class="row-sb">
+              <span class="text-sm muted">Streak bonus</span><span class="text-sm">+12 XP</span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="row-sb">
+              <div class="col">
+                <span class="text-xs muted">Level Progress</span>
+                <span class="text-md" style="font-weight:700; color:#1976D2;">Level 7</span>
+              </div>
+              <div style="flex:1; margin: 0 12px;">
+                <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:78%;"></div></div>
+              </div>
+              <span class="text-xs muted">78%</span>
+            </div>
+          </div>
+          <div class="btn-filled">Done</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Achievements ── -->
+  <div class="section-label">Achievements</div>
+  <div class="screens">
+
+    <div class="phone">
+      <div class="phone-label">Achievements</div>
+      <div class="phone-shell">
+        <div class="status-bar"><span>9:41</span><span>●●●</span></div>
+        <div class="app-bar"><div class="title">Achievements</div></div>
+        <div class="screen-body">
+          <div class="row-sb" style="margin-bottom:10px;">
+            <span class="text-md" style="font-weight:700;">Unlocked <span class="chip chip-green" style="margin-left:4px;">3</span></span>
+          </div>
+          <div class="card" style="padding:8px 14px;">
+            <div class="row" style="padding:8px 0; border-bottom:1px solid #f0f0f0;">
+              <div style="font-size:28px; width:40px;">🔥</div>
+              <div class="col flex-1">
+                <div class="text-sm" style="font-weight:600;">Hot Streak</div>
+                <div class="text-xs muted">Maintain a 10-day streak</div>
+              </div>
+              <span class="chip chip-amber">+50 XP</span>
+            </div>
+            <div class="row" style="padding:8px 0; border-bottom:1px solid #f0f0f0;">
+              <div style="font-size:28px; width:40px;">⏱️</div>
+              <div class="col flex-1">
+                <div class="text-sm" style="font-weight:600;">Marathon</div>
+                <div class="text-xs muted">Complete a 90-min session</div>
+              </div>
+              <span class="chip chip-amber">+100 XP</span>
+            </div>
+            <div class="row" style="padding:8px 0;">
+              <div style="font-size:28px; width:40px;">🌟</div>
+              <div class="col flex-1">
+                <div class="text-sm" style="font-weight:600;">Perfect 100</div>
+                <div class="text-xs muted">Score 100 on a session</div>
+              </div>
+              <span class="chip chip-amber">+200 XP</span>
+            </div>
+          </div>
+
+          <div class="row-sb" style="margin:16px 0 10px;">
+            <span class="text-md" style="font-weight:700;">Locked <span class="chip chip-grey" style="margin-left:4px;">5</span></span>
+          </div>
+          <div class="card" style="padding:8px 14px; opacity:.6;">
+            <div class="row" style="padding:8px 0; border-bottom:1px solid #f0f0f0;">
+              <div style="font-size:28px; width:40px; filter:grayscale(1);">🎖️</div>
+              <div class="col flex-1">
+                <div class="text-sm" style="font-weight:600;">Century</div>
+                <div class="text-xs muted">Complete 100 sessions</div>
+              </div>
+              <span class="chip chip-grey">+500 XP</span>
+            </div>
+            <div class="row" style="padding:8px 0;">
+              <div style="font-size:28px; width:40px; filter:grayscale(1);">🧠</div>
+              <div class="col flex-1">
+                <div class="text-sm" style="font-weight:600;">Deep Thinker</div>
+                <div class="text-xs muted">100 hours total focus</div>
+              </div>
+              <span class="chip chip-grey">+1000 XP</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
